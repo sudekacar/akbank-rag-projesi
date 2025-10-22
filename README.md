@@ -116,10 +116,13 @@ Projeyi lokal makinenizde çalıştırmak isterseniz aşağıdaki adımları tak
     ```
  ## 8. Güvenlik & Gizlilik
 
-API anahtarı .env dosyasında tutulur.
-Hiçbir kişisel müşteri verisi (PII) kullanılmaz.
-Tüm veri, yalnızca kamuya açık veya izinli finansal dokümanlardan oluşur.
-Kullanıcı sorguları loglanmaz veya paylaşılmaz.
+** API anahtarı .env dosyasında tutulur.
+
+** Hiçbir kişisel müşteri verisi (PII) kullanılmaz.
+
+**Tüm veri, yalnızca kamuya açık veya izinli finansal dokümanlardan oluşur.
+
+** Kullanıcı sorguları loglanmaz veya paylaşılmaz.
 
 ## 9. Ölçüm & Değerlendirme
 
@@ -134,12 +137,17 @@ Kullanıcı sorguları loglanmaz veya paylaşılmaz.
 ## 10. Gelecek Yol Haritası
 
 ** Query Rewriting (HyDE / Multi-Query) ile sorgu anlama geliştirmesi
+
 ** BGE-Reranker entegrasyonu ile arama kalitesi artırımı
+
 ** Kaynak Highlighting (cevapta belge referansının tıklanabilir hale getirilmesi)LangSmith izleme entegrasyonu (token kullanımı, hatalar, latency)
+
 ** Rol Tabanlı Erişim (RBAC) ve denetim kayıtları
+
 ** In-memory cache ile sık sorulan sorguların hızlandırılması
 
 ## Sonuç
 
-Akbank Finansal Asistanı, LLM modellerinin doğruluk sorununu RAG mimarisiyle çözerek finans sektöründe uygulanabilir, güvenilir bir yapay zekâ asistanı örneği ortaya koymuştur.
-Projede kullanılan teknoloji zinciri (Gemini 2.5 + LangChain + ChromaDB + Streamlit/Gradio) ile hem teknik hem kullanıcı deneyimi açısından güçlü bir çözüm sunulmuştur.
+** Akbank Finansal Asistanı, LLM modellerinin doğruluk sorununu RAG mimarisiyle çözerek finans sektöründe uygulanabilir, güvenilir bir yapay zekâ asistanı örneği ortaya koymuştur.
+
+** Projede kullanılan teknoloji zinciri (Gemini 2.5 + LangChain + ChromaDB + Streamlit/Gradio) ile hem teknik hem kullanıcı deneyimi açısından güçlü bir çözüm sunulmuştur.

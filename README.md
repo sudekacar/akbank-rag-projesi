@@ -9,6 +9,7 @@ Projenin temel amacı, Büyük Dil Modelleri'nin (LLM) en büyük sorunu olan "h
 ## 2. Veri Seti Hakkında Bilgi
 
 **Tip:** Projeye özel olarak hazırlanmış ve Akbank'ın sunduğu ürün ve hizmetlere odaklanan finansal bilgi dokümanları (PDF/Metin).
+
 **İçerik:** Veri seti, bankacılık, yatırım ve emeklilik alanlarını kapsayan detaylı finansal terimler ve ürün bilgilerini içerir. **Bu bilgi havuzunda yer alan detaylı konular şunlardır: Vadesiz Mevduat Hesapları, Yatırım Fonları, Bireysel Emeklilik Sistemi (BES), Hisse Senedi İşlemleri ve Borçlanma Araçları.** Proje, **T.C. Merkez Bankası (TCMB) veya TMCD**, **BIST** ve **Hazine Müsteşarlığı (HMB)** gibi kurumların finansal piyasalara dair terminolojisini ve ilgili enstrümanlarını içeren metinlerle güçlendirilmiştir. Bu zengin ve teknik içerik, asistanın finansal bağlamda doğru, spesifik ve teknik yanıtlar üretmesini sağlar.
 
 ## 3. Kullanılan Yöntemler ve Çözüm Mimarisi

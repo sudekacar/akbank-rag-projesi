@@ -37,4 +37,4 @@ Proje, **LangChain** framework'ü üzerine kurulu **RAG** mimarisi kullanılarak
 Projenin canlı web arayüzüne (Streamlit Cloud) aşağıdaki adresten ulaşabilirsiniz:
 
 **WEB UYGULAMASI LİNKİ:**
-`[LÜTFEN BURAYA STREAMLIT CLOUD'DAN ALDIĞINIZ CANLI URL'Yİ YAPIŞTIRIN]`
+[https://akbank-rag-projesi-zknvhfzvtxajqgzgtac4pu.streamlit.app/](https://akbank-rag-projesi-zknvhfzvtxajqgzgtac4pu.streamlit.app/)

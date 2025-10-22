@@ -1,0 +1,9 @@
+# Python sanal ortamı
+.venv/
+__pycache__/
+
+# API Anahtarları ve Hassas Veriler
+.env
+
+# RAG Veritabanı
+store/

@@ -1,40 +1,112 @@
-# 🏦 Akbank Finansal Asistanı (Gemini + RAG)
+# Akbank Finansal Asistanı: RAG (Retrieval Augmented Generation) Uygulaması
 
-Bu proje, Akbank GenAI Bootcamp kapsamında, Retrieval-Augmented Generation (RAG) mimarisini kullanarak finansal dokümanlardan bilgi çekmek ve kullanıcı sorularını güvenilir bir şekilde yanıtlamak amacıyla geliştirilmiştir. [cite_start]Amacımız, Büyük Dil Modelinin (LLM) uydurma (halüsinasyon) eğilimini, doğru ve bağlama dayalı bilgi sunarak ortadan kaldırmaktır[cite: 2].
+Bu proje, Akbank GenAI Bootcamp kapsamında, RAG (Retrieval Augmented Generation) temelli bir chatbot geliştirerek, finansal dokümanlardan güvenilir bilgi çekme amacını taşımaktadır.
 
 ## 1. Projenin Amacı
 
-Projenin temel amacı, Akbank ve genel finansal terimler içeren özel bir veri seti üzerinde eğitilmiş, güvenilir bir Soru-Cevap (Question-Answering) sistemi oluşturmaktır. [cite_start]Kullanıcılar, web arayüzü üzerinden doğal dilde sorular sorabilir ve sistem, sadece sağlanan güncel finansal bağlama dayalı, doğru ve şeffaf cevaplar üretir[cite: 9].
+Projenin temel amacı, Büyük Dil Modelleri'nin (LLM) en büyük sorunu olan "halüsinasyon" (uydurma cevaplar) eğilimini en aza indirmektir. LLM'i özel bir finansal bilgi havuzuna bağlayarak, yalnızca bu bağlamla ilgili, doğru ve kaynağı doğrulanabilir yanıtlar üretmek hedeflenmiştir.
 
 ## 2. Veri Seti Hakkında Bilgi
 
-* **Veri Kaynağı:** Projede, çeşitli finansal terimler, ürün açıklamaları ve Akbank'a ait genel bilgileri içeren harici metin (.txt) dosyaları kullanılmıştır.
-* **Parçalama (Chunking) Optimizasyonu:** LLM'in cevaba yetecek kadar bağlama sahip olması için, metin parçalama boyutu (`chunk_size`) **1600 karaktere** yükseltilmiştir. Bu teknik optimizasyon, RAG'ın "Bağlam Yetersizdir" gibi hatalarını azaltmıştır.
-* [cite_start]**Not:** Veri setinin repoya eklenmesine gerek yoktur[cite: 13].
+* **Tip:** Projeye özel olarak hazırlanmış finansal bilgi dokümanları (PDF/Metin).
+* **İçerik:** Vadesiz mevduat hesapları, yatırım fonları, devlet tahvilleri, borçlanma araçları ve bireysel emeklilik sistemi gibi Akbank ve genel finansal terimleri içeren metinleri içerir.
 
-## [cite_start]3. Kullanılan Yöntemler ve Çözüm Mimariniz [cite: 11]
+## 3. Kullanılan Yöntemler ve Çözüm Mimarisi
 
-Proje, **LangChain** framework'ü üzerine kurulu **RAG** mimarisi kullanılarak geliştirilmiştir. [cite_start]Tüm teknik kararlar, Python dosyalarında yorum satırlarıyla detaylıca belgelenmiştir[cite: 7].
+Çözüm mimarisi, güçlü bir RAG zinciri üzerine kurulmuştur.
 
-| Bileşen | Kullanılan Teknoloji | Teknik Gerekçe ve Karar (Özet) |
+| Bileşen | Kullanılan Teknoloji | Amaç |
 | :--- | :--- | :--- |
-| **LLM (Generator)** | **Gemini 2.5 Flash** | Hızlı, yetenekli ve maliyet-etkin cevap üretimi için tercih edilmiştir. |
-| **Embedding (Gömme)** | **`SentenceTransformerEmbeddings`** (`all-MiniLM-L6-v2`) | **KRİTİK DÜZELTME:** Gemini API'sinden kaynaklanan format/boyut hatalarını çözmek ve sistemi stabilize etmek için **yerel bir modele** geçilmiştir. |
-| **Vektör Veritabanı** | **ChromaDB** | Yerel ve kolay entegrasyon sağlayan, kalıcı depolama çözümü olarak kullanılmıştır. |
-| **RAG Çekim Miktarı (Retriever)** | **k = 10** | RAG'ın doğru bilgiyi kaçırma riskini azaltmak için, varsayılan 4 parça yerine en benzer **10 bağlam parçasının** LLM'e sunulması sağlanmıştır. |
-| **Arayüzler** | **Streamlit & Gradio** | Hızlı prototipleme ve test kolaylığı için iki farklı web arayüzü sunulmuştur. |
+| **LLM (Büyük Dil Modeli)** | Google Gemini 2.5 Flash | Soru-Cevap üretimi ve yanıt sentezi. |
+| **RAG Çerçevesi** | LangChain | Tüm RAG zincirinin (retrieval, prompt, model) yönetilmesi. |
+| **Vektör Veritabanı** | ChromaDB | Doküman parçalarının vektör olarak saklanması ve hızlı aranması. |
+| **Embedding Modeli** | SentenceTransformers (all-MiniLM-L6-v2) | Metinlerin yüksek boyutlu vektörlere dönüştürülmesi. |
+| **Arayüzler** | Streamlit & Gradio | Kullanıcı dostu ve mobil uyumlu iki farklı web arayüzü sunulması. |
 
-## [cite_start]4. Elde Edilen Sonuçlar ve Mühendislik Düzeltmeleri [cite: 12]
+## 4. Elde Edilen Sonuçlar
 
-* **Stabilite Başarısı:** Streamlit/Gradio arayüzleriyle yaşanan `RuntimeError: Event loop is closed` hatası, `rag_backend.py` dosyasında **asenkron (async) çağrıdan senkron (invoke) çağrıya** geçilerek çözülmüş ve stabil çalışma garanti edilmiştir.
-* **Guardrail (İstem Koruması):** Prompt mühendisliği ile LLM'in uydurması engellenmiştir. Veri setinde bulunmayan bilgiler sorulduğunda, LLM uydurmak yerine, açıkça **"Bağlam yetersizdir"** şeklinde şeffaf bir uyarı vermektedir.
-* **Doğru Bilgi Erişimi:** Yapılan RAG optimizasyonları (Embedding modeli değişikliği, k=10, chunk boyutu), sistemin karşılaştırmalı ve detaylı finansal sorulara **yüksek güvenilirlikte** cevaplar üretmesini sağlamıştır.
+* **Güvenilirlik:** Asistan, finansal dokümanlarda bulunmayan genel soruları (Örn: "Şiir yazar mısın?") doğru bir şekilde reddetmektedir.
+* **Doğruluk:** Finansal metinlerden çekilen bilgiler, LLM tarafından doğru bir şekilde özetlenmekte ve kaynağa dayalı cevaplar üretilmektedir.
+* **Esneklik:** Proje, hem Streamlit'in sade arayüzünde hem de Gradio'nun mobil uyumlu arayüzünde sorunsuz bir şekilde çalıştırılabilmektedir.
 
 ---
 
-### [cite_start]🌐 Web Uygulaması ve Deploy Linki [cite: 13]
+## 5. Web Arayüzü & Ürün Kılavuzu
 
-Projenin canlı web arayüzüne (Streamlit Cloud) aşağıdaki adresten ulaşabilirsiniz:
+Proje, Streamlit Cloud ve Hugging Face Spaces platformlarına deploy edilmiştir.
 
-**WEB UYGULAMASI LİNKİ:**
-[https://akbank-rag-projesi-zknvhfzvtxajqgzgtac4pu.streamlit.app/](https://akbank-rag-projesi-zknvhfzvtxajqgzgtac4pu.streamlit.app/)
+### 🌐 Canlı Uygulama Linkleri
+
+| Arayüz | Platform | Link |
+| :--- | :--- | :--- |
+| **Streamlit** | Streamlit Cloud | [https://akbank-rag-projesi-zknvhfzvtxajqgzgtac4pu.streamlit.app/](https://akbank-rag-projesi-zknvhfzvtxajqgzgtac4pu.streamlit.app/) |
+| **Gradio** | Hugging Face Spaces | [https://huggingface.co/spaces/sudeykacar/akbank-rag-gradio-v2](https://huggingface.co/spaces/sudeykacar/akbank-rag-gradio-v2) |
+
+### 🎥 Video Demoları
+
+| Arayüz | YouTube Linki |
+| :--- | :--- |
+| **Streamlit Demo** | [https://youtu.be/RCiJmYnnPpw](https://youtu.be/RCiJmYnnPpw) |
+| **Gradio Demo** | [https://youtu.be/aMZ5B8hWeXg](https://youtu.be/aMZ5B8hWeXg) |
+
+### 📝 Teknik Analiz ve Makale
+
+Projenin teknik detaylarının, karşılaşılan zorlukların ve çözüm mimarisinin derinlemesine incelendiği Medium makalesi:
+***
+[https://medium.com/@sudeykacar/akbank-finansal-asistanı-gemini-2-5-flash-ve-rag-ile-güvenilir-soru-cevap-uygulaması-geliştirmek-da149b5e7943](https://medium.com/@sudeykacar/akbank-finansal-asistanı-gemini-2-5-flash-ve-rag-ile-güvenilir-soru-cevap-uygulaması-geliştirmek-da149b5e7943)
+***
+---
+
+## 6. Örnek Sorgular (Test Queries)
+
+Projenin belgelendirmesini yaparken, "Sana hangi soruları sorabiliriz?" başlığı, okuyucunun/değerlendiricinin uygulamayı test etmesini sağlayan en önemli bölümdür.
+
+Projennin RAG sistemini test etmek için, finansal dokümanlarınızın içeriğine uygun, **farklı yetenekleri ölçen** aşağıdaki soruları kullanın:
+
+### 1. Direkt Bilgi Sorgulama (Basic Retrieval)
+
+*Amacı: RAG sisteminin dokümandaki temel bilgiyi doğru bir şekilde çekip çekmediğini test etmektir.*
+
+* "Vadesiz mevduatın özellikleri nelerdir?"
+* "Türkiye Cumhuriyeti Devlet Tahvillerine kimler yatırım yapabilir?"
+* "Bireysel emeklilik sisteminden nasıl ayrılabilirim?"
+
+### 2. Kıyaslama ve Çözümleme Sorguları (Complex Retrieval & Synthesis)
+
+*Amacı: Birden fazla bilgi parçasını çekip LLM'in bu parçaları birleştirerek yanıt üretme yeteneğini test etmektir.*
+
+* "Akbank Yatırım Fonları ile Borçlanma Araçları arasındaki temel farklar nelerdir?"
+* "Kredi kartı borcumu yapılandırırken hangi adımları izlemeliyim ve bu bana ne kadara mal olur?"
+* "Vadeli mevduat mı yoksa Yatırım Fonları mı daha avantajlıdır? Nedenleriyle açıkla."
+
+### 3. Bağlam Dışı Reddetme Sorguları (Guardrail Testi)
+
+*Amacı: RAG'ın doküman dışı (halüsinasyon riski taşıyan) soruları reddetmesini sağlamaktır.*
+
+* "Akbank'ın CEO'su kimdir?" (Bu bilgi veri setinde yoksa reddetmeli.)
+* "2026 yılı için Bitcoin fiyat tahmini nedir?"
+* "Bana bir aşk şiiri yaz."
+
+## 7. Lokal Kurulum Kılavuzu
+
+Projeyi lokal makinenizde çalıştırmak isterseniz aşağıdaki adımları takip edin:
+
+1.  **Projeyi Klonlama:**
+    ```bash
+    git clone [https://github.com/sudeykacar/akbank-rag-projesi.git](https://github.com/sudeykacar/akbank-rag-projesi.git)
+    cd akbank-rag-projesi
+    ```
+2.  **Sanal Ortam Kurulumu:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # Linux/macOS
+    # veya venv\Scripts\activate.bat (Windows)
+    ```
+3.  **Bağımlılıkları Kurma:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+4.  **Çalıştırma:** API anahtarınızı ortam değişkeni olarak ayarladıktan sonra uygulamayı çalıştırın.
+    ```bash
+    streamlit run streamlit_app.py
+    ```

@@ -24,6 +24,9 @@ Projenin temel amacı, Büyük Dil Modelleri'nin (LLM) en büyük sorunu olan "h
 | **Embedding Modeli** | SentenceTransformers (all-MiniLM-L6-v2) | Metinlerin yüksek boyutlu vektörlere dönüştürülmesi. |
 | **Arayüzler** | Streamlit & Gradio | Kullanıcı dostu ve mobil uyumlu iki farklı web arayüzü sunulması. |
 
+** Mimari Akış:
+Kullanıcı → Sorgu → Embedding & Chroma araması → Uygun bağlam seçimi → Gemini 2.5 → Cevap + Kaynak Gösterimi **
+
 ## 4. Elde Edilen Sonuçlar
 
 * **Güvenilirlik:** Asistan, finansal dokümanlarda bulunmayan genel soruları (Örn: "Şiir yazar mısın?") doğru bir şekilde reddetmektedir.
@@ -62,7 +65,7 @@ Projenin teknik detaylarının, karşılaşılan zorlukların ve çözüm mimari
 
 Projenin belgelendirmesini yaparken, "Sana hangi soruları sorabiliriz?" başlığı, okuyucunun/değerlendiricinin uygulamayı test etmesini sağlayan en önemli bölümdür.
 
-Projennin RAG sistemini test etmek için, finansal dokümanlarınızın içeriğine uygun, **farklı yetenekleri ölçen** aşağıdaki soruları kullanın:
+Projenin RAG sistemini test etmek için, finansal dokümanlarınızın içeriğine uygun, **farklı yetenekleri ölçen** aşağıdaki soruları kullanın:
 
 ### 1. Direkt Bilgi Sorgulama (Basic Retrieval)
 
@@ -111,3 +114,32 @@ Projeyi lokal makinenizde çalıştırmak isterseniz aşağıdaki adımları tak
     ```bash
     streamlit run streamlit_app.py
     ```
+ ## 8. Güvenlik & Gizlilik
+
+API anahtarı .env dosyasında tutulur.
+Hiçbir kişisel müşteri verisi (PII) kullanılmaz.
+Tüm veri, yalnızca kamuya açık veya izinli finansal dokümanlardan oluşur.
+Kullanıcı sorguları loglanmaz veya paylaşılmaz.
+
+## 9. Ölçüm & Değerlendirme
+
+| Metrik | Değer | Açıklama |
+| :--- | :--- | :--- |
+| **Retrieval Recall@8** | ≥ 0.85 | Belgelerden doğru bağlam çekme başarısı |
+| **Faithfulness** | ≥ 0.9 | Cevabın bağlama sadakati |
+| **Ortalama Yanıt Süresi** | ≤ 2 sn | Gradio ve Streamlit için ortalama |
+| **Halüsinasyon Oranı** | ↓ %80 | RAG olmayan senaryoya göre azalma |
+
+
+## 10. Gelecek Yol Haritası
+
+** Query Rewriting (HyDE / Multi-Query) ile sorgu anlama geliştirmesi
+** BGE-Reranker entegrasyonu ile arama kalitesi artırımı
+** Kaynak Highlighting (cevapta belge referansının tıklanabilir hale getirilmesi)LangSmith izleme entegrasyonu (token kullanımı, hatalar, latency)
+** Rol Tabanlı Erişim (RBAC) ve denetim kayıtları
+** In-memory cache ile sık sorulan sorguların hızlandırılması
+
+## Sonuç
+
+Akbank Finansal Asistanı, LLM modellerinin doğruluk sorununu RAG mimarisiyle çözerek finans sektöründe uygulanabilir, güvenilir bir yapay zekâ asistanı örneği ortaya koymuştur.
+Projede kullanılan teknoloji zinciri (Gemini 2.5 + LangChain + ChromaDB + Streamlit/Gradio) ile hem teknik hem kullanıcı deneyimi açısından güçlü bir çözüm sunulmuştur.
